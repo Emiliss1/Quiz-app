@@ -19,14 +19,12 @@ export default function Login() {
       username,
       password,
     };
-    console.log(data);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_DB_URL}/auth/signin`,
         data
       );
       if (response) {
-        console.log(response);
         logIn(response.data.accessToken);
         navigate("/");
         setErrMsg("");

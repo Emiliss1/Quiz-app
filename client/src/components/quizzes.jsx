@@ -39,7 +39,6 @@ export default function Quizzes() {
           tokenHeader
         );
 
-        console.log(response);
         if (response) {
           setQuizzes(pagination(response.data.reverse(), curPage).pageItems);
           setQuizzesData(response.data.reverse());
@@ -92,7 +91,6 @@ export default function Quizzes() {
   };
 
   const handleRemoveQuiz = async (quiz) => {
-    console.log(quiz);
     const data = {
       _id: quiz._id,
     };
@@ -104,8 +102,6 @@ export default function Quizzes() {
         tokenHeader
       );
 
-      console.log(response);
-
       if (response) {
         const filterQuizzes = quizzes.filter((quizz) => quizz._id !== quiz._id);
 
@@ -115,7 +111,6 @@ export default function Quizzes() {
         setQuizzesData(filteredQuizzes);
         setLastPage(pagination(filteredQuizzes, curPage).totalPages);
 
-        console.log("hadasda", filterQuizzes);
         if (filterQuizzes.length === 0) {
           if (curPage > 0) {
             setCurpage((prev) => prev - 1);

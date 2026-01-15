@@ -43,7 +43,6 @@ export default function Settings() {
         data,
         tokenHeader
       );
-      console.log(response);
 
       if (response) {
         Cookies.set("token", response.data.accessToken, { expires: 1 / 24 });

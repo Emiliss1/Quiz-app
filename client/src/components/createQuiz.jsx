@@ -94,7 +94,6 @@ export function CreateQuiz() {
           quiz,
           tokenHeader
         );
-        console.log(response);
         if (response) {
           setTitle("");
           setDifficulty("easy");

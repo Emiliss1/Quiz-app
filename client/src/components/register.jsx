@@ -19,14 +19,12 @@ export default function Register() {
       password,
       confPassword,
     };
-    console.log(data);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_DB_URL}/auth/signup`,
         data
       );
       if (response) {
-        console.log(response);
         navigate("/login");
         setErrMsg("");
       }

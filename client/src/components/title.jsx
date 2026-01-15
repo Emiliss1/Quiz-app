@@ -6,7 +6,6 @@ import { RiAdminFill } from "react-icons/ri";
 
 export function Title({ title }) {
   const { user, authErr, logOut } = useAuth();
-  console.log(user);
   return (
     <div className="h-max py-4 bg-gray-200/20 px-4 border-b-2 w-full border-gray-300/30 grid grid-cols-1 justify-items-center gap-y-2 sm:grid-cols-3 ">
       {!authErr && (

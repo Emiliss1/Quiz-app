@@ -36,7 +36,6 @@ export default function Quiz() {
         if (response) {
           setQuiz(response.data);
         }
-        console.log(response);
       } catch (err) {
         console.log(err);
       }
@@ -79,7 +78,6 @@ export default function Quiz() {
       });
       setAnswers(newAnswers);
     }
-    console.log(answers);
   };
 
   const handleQuestionNavigation = (type) => {
@@ -100,9 +98,7 @@ export default function Quiz() {
       (answ) => answ.questionIndex === curQuestion
     );
     if (!foundQuestion) return false;
-    console.log(
-      foundQuestion.guessedAnswers.some((ans) => ans.answer === value.answer)
-    );
+
     return foundQuestion.guessedAnswers.some(
       (ans) => ans.answer === value.answer
     );
@@ -116,14 +112,12 @@ export default function Quiz() {
         (gAns) => gAns.isCorrect === true
       );
       if (isCorrect) correctAnswers++;
-      console.log(isCorrect);
     });
 
     const answerScore = Math.round(
       (correctAnswers / quiz.questions.length) * 100
     );
     setScore(answerScore);
-    console.log(answerScore);
 
     let answerPoints = 0;
 
