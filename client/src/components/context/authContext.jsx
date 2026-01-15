@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
           Authorization: `Bearer ${token}`,
         },
       };
+      setAuthErr(true);
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_DB_URL}/user/profile`,
