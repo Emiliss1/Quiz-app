@@ -109,12 +109,17 @@ export default function Quizzes() {
           (quizz) => quizz._id !== quiz._id
         );
         setQuizzesData(filteredQuizzes);
-        setLastPage(pagination(filteredQuizzes, curPage).totalPages);
+
+        if (filteredQuizzes.length > 0) {
+          setLastPage(pagination(filteredQuizzes, curPage).totalPages);
+        }
 
         if (filterQuizzes.length === 0) {
           if (curPage > 0) {
             setCurpage((prev) => prev - 1);
             setQuizzes(pagination(filteredQuizzes, curPage - 1).pageItems);
+          } else {
+            setQuizzes([]);
           }
         } else {
           setQuizzes(pagination(filteredQuizzes, curPage).pageItems);
