@@ -25,14 +25,17 @@ export class QuizController {
 
   @Roles(Role.USER, Role.ADMIN)
   @Get('/quizzes')
-  getQuizzes(): Promise<Quiz[]> {
-    return this.quizService.getQuizzes();
+  getQuizzes(@GetUser() user: User): Promise<Quiz[]> {
+    return this.quizService.getQuizzes(user);
   }
 
   @Roles(Role.USER, Role.ADMIN)
   @Get('/getquiz/:id')
-  getQuiz(@Param() quizFindDto: QuizFindDto): Promise<Quiz> {
-    return this.quizService.getQuiz(quizFindDto);
+  getQuiz(
+    @GetUser() user: User,
+    @Param() quizFindDto: QuizFindDto,
+  ): Promise<Quiz> {
+    return this.quizService.getQuiz(user, quizFindDto);
   }
 
   @Roles(Role.USER, Role.ADMIN)

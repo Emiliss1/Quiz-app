@@ -6,6 +6,7 @@ import { QuizFindDto } from './dto/quiz-find.dto';
 import { User } from 'src/auth/user.schema';
 import { QuizCompleteDto } from './dto/quiz-complete.dto';
 import { QuizRemoveDto } from './dto/quiz-remove.dto';
+import { GetUser } from 'src/user/get-user.decorator';
 
 @Injectable()
 export class QuizService {
@@ -15,12 +16,15 @@ export class QuizService {
     return this.quizRepository.createQuiz(quizCreateDto);
   }
 
-  async getQuizzes(): Promise<Quiz[]> {
-    return this.quizRepository.getQuizzes();
+  async getQuizzes(user: User): Promise<Quiz[]> {
+    return this.quizRepository.getQuizzes(user);
   }
 
-  async getQuiz(quizFindDto: QuizFindDto): Promise<Quiz> {
-    return this.quizRepository.getQuiz(quizFindDto);
+  async getQuiz(
+    @GetUser() user: User,
+    quizFindDto: QuizFindDto,
+  ): Promise<Quiz> {
+    return this.quizRepository.getQuiz(user, quizFindDto);
   }
 
   async completeQuiz(

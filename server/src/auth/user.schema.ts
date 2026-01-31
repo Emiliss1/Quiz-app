@@ -26,6 +26,9 @@ export class User {
 
   @Prop({ default: 0 })
   points: number;
+
+  @Prop()
+  completed: string[];
 }
 
 export const userSchema = SchemaFactory.createForClass(User);

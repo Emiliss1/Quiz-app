@@ -5,6 +5,8 @@ import axios from "axios";
 import { CompleteQuiz } from "./completeQuiz";
 import { useAuth } from "./context/authContext";
 import { Footer } from "./footer";
+import { AuthErr } from "./authErr";
+import { CompletedErr } from "./completedErr";
 
 export default function Quiz() {
   const [quiz, setQuiz] = useState("");
@@ -13,6 +15,7 @@ export default function Quiz() {
   const [isFinished, setIsFinished] = useState(false);
   const [score, setScore] = useState(0);
   const [points, setPoints] = useState(0);
+  const [completedErr, setCompletedErr] = useState(null);
 
   const { pathname } = useLocation();
   const quizId = pathname.replace("/quiz/", "");
@@ -24,20 +27,26 @@ export default function Quiz() {
     },
   };
 
-  const { authErr, updateBalance } = useAuth();
+  const { authErr, updateBalance, handleAuthErr } = useAuth();
 
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
         const response = await axios.get(
           `${import.meta.env.VITE_DB_URL}/quiz/getquiz/${quizId}`,
-          tokenHeader
+          tokenHeader,
         );
         if (response) {
           setQuiz(response.data);
         }
       } catch (err) {
         console.log(err);
+        if (err.status === 401) {
+          handleAuthErr(true);
+        }
+        if (err.status === 409) {
+          setCompletedErr(err.response.data.message);
+        }
       }
     };
     fetchQuiz();
@@ -69,7 +78,7 @@ export default function Quiz() {
         const newAns = oldAns;
         if (oldAns.questionIndex === curQuestion) {
           const newGuessedAnswers = oldAns.guessedAnswers.filter(
-            (guessedAns) => guessedAns !== ans
+            (guessedAns) => guessedAns !== ans,
           );
           newAns.guessedAnswers = newGuessedAnswers;
         }
@@ -95,12 +104,12 @@ export default function Quiz() {
 
   const checkCheckboxValue = (value) => {
     const foundQuestion = answers.find(
-      (answ) => answ.questionIndex === curQuestion
+      (answ) => answ.questionIndex === curQuestion,
     );
     if (!foundQuestion) return false;
 
     return foundQuestion.guessedAnswers.some(
-      (ans) => ans.answer === value.answer
+      (ans) => ans.answer === value.answer,
     );
   };
 
@@ -109,13 +118,13 @@ export default function Quiz() {
 
     answers.forEach((ans) => {
       const isCorrect = ans.guessedAnswers.every(
-        (gAns) => gAns.isCorrect === true
+        (gAns) => gAns.isCorrect === true,
       );
       if (isCorrect) correctAnswers++;
     });
 
     const answerScore = Math.round(
-      (correctAnswers / quiz.questions.length) * 100
+      (correctAnswers / quiz.questions.length) * 100,
     );
     setScore(answerScore);
 
@@ -146,12 +155,12 @@ export default function Quiz() {
   };
 
   const handleFinishQuiz = async () => {
-    const pointsData = { points: calculateCorrectAnswers() };
+    const pointsData = { points: calculateCorrectAnswers(), quizId };
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_DB_URL}/quiz/completequiz`,
         pointsData,
-        tokenHeader
+        tokenHeader,
       );
       console.log(response);
       if (response) {
@@ -160,6 +169,12 @@ export default function Quiz() {
       }
     } catch (err) {
       console.log(err);
+      if (err.status === 401) {
+        handleAuthErr(true);
+      }
+      if (err.status === 409) {
+        setCompletedErr(true);
+      }
     }
   };
 
@@ -172,7 +187,9 @@ export default function Quiz() {
         {isFinished ? (
           <CompleteQuiz score={score} points={points} />
         ) : authErr ? (
-          <authErr />
+          <AuthErr />
+        ) : completedErr ? (
+          <CompletedErr err={completedErr} />
         ) : (
           <div className="flex flex-col">
             {quiz.questions?.length > 0 &&

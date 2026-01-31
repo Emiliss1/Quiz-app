@@ -8,7 +8,7 @@ export function Leaderboard() {
     const fetchTopUsers = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_DB_URL}/user/topusers`
+          `${import.meta.env.VITE_DB_URL}/user/topusers`,
         );
 
         if (response) {
@@ -21,7 +21,7 @@ export function Leaderboard() {
     fetchTopUsers();
   }, []);
   return (
-    <div className="w-11/12 sm:w-120  h-max pb-4 shadow-xl/20  bg-white/95 backdrop-blur-sm border border-zinc-200 rounded-xl">
+    <div className="w-11/12 sm:w-120  h-max pb-4 shadow-xl/20 mb-4 sm:mb-0 bg-white/95 backdrop-blur-sm border border-zinc-200 rounded-xl">
       <div className="bg-gray-200/20 border-b border-zinc-200  text-xl font-medium py-4 flex justify-center gap-2 items-center">
         <FaTrophy className="text-2xl text-yellow-500" />
         <h1 className="break-all">Leaderboard</h1>
@@ -40,10 +40,10 @@ export function Leaderboard() {
                   index === 0
                     ? "text-amber-600 bg-amber-200 border-2 border-amber-400"
                     : index === 1
-                    ? "text-slate-500 bg-slate-200 border-2 border-slate-500"
-                    : index === 2
-                    ? "text-amber-600 bg-orange-300 border-2 border-amber-600"
-                    : ""
+                      ? "text-slate-500 bg-slate-200 border-2 border-slate-500"
+                      : index === 2
+                        ? "text-amber-600 bg-orange-300 border-2 border-amber-600"
+                        : ""
                 }`}
               >
                 {index + 1}
